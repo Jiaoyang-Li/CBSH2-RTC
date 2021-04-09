@@ -96,6 +96,8 @@ private:
 
 	// find path
 	Path findShortestPath(ConstraintTable& constraint_table, const pair<int, int> start_state, int lowerbound);
+    Path findShortestPath(ConstraintTable& constraint_table, const pair<int, int> start_state, int lowerbound,
+            const pair<int, int> landmark);
 	Path findPath(ConstraintTable& constraint_table, const pair<int, int> start, const pair<int, int> goal);
 
 	// Updates the path datamember
