@@ -14,6 +14,7 @@ This solver consists of Conflict-Based Search [1] and many of its improvement te
     * target reasoning [8]
     * corridor reasoning [8] and corridor-target reasoning [7]
     * mutex propagation [9]
+* Disjoint splitting [10]
  
  
  
@@ -100,3 +101,6 @@ In Proceedings of the International Conference on Automated Planning and Schedul
 Multi-Agent Path Finding with Mutex Propagation.
 In Proceedings of the International Conference on Automated Planning and Scheduling (ICAPS), pages 323-332, 2020.
  
+[10] Jiaoyang Li, Daniel Harabor, Peter J. Stuckey, Ariel Felner, Hang Ma, and Sven Koenig.
+Disjoint Splitting for Multi-Agent Path Finding with Conflict-Based Search.
+In Proceedings of the International Conference on Automated Planning and Scheduling (ICAPS), pages 279-283, 2019.
