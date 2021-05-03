@@ -119,7 +119,7 @@ void CBS::findConflicts(CBSNode& curr)
 	clock_t t = clock();
 	if (curr.parent != nullptr)
 	{
-		// Copy from parent、
+		// Copy from parent
 		list<int> new_agents;
 		for (const auto& p : curr.paths)
 		{
