@@ -725,6 +725,8 @@ bool RectangleReasoning::scanPerimeter(int& stage, const vector<bool>& overlap_a
                         R1 = edge;
                         break;
                     case 1: // Rs->R1
+                        if (passRg)
+                            return false;
                         R1 = edge;
                         break;
                     case 2: //Rs->R2
@@ -761,6 +763,8 @@ bool RectangleReasoning::scanPerimeter(int& stage, const vector<bool>& overlap_a
                         R2 = edge;
                         break;
                     case 2: //Rs->R2
+                        if (passRg)
+                            return false;
                         R2 = edge;
                         break;
                     case 3: // R1->Rs
