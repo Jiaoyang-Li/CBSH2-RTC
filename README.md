@@ -19,10 +19,9 @@ This solver consists of Conflict-Based Search [1] and many of its improvement te
  
  
 Please cite the following paper if you use the code in your published research:  
-Jiaoyang Li, Daniel Harabor, Peter J. Stuckey, and Sven Koenig. 
-Pairwise Symmetry Reasoning for Multi-Agent Path Finding Search.
-CoRR, abs/2103.07116, 2021.
-
+Jiaoyang Li, Daniel Harabor, Peter J. Stuckey, Hang Ma, Graeme Gange and Sven Koenig.
+[Pairwise Symmetry Reasoning for Multi-Agent Path Finding Search](https://doi.org/10.1016/j.artint.2021.103574).
+Artifical Intelligence (AIJ), volume 301, pages 103574, 2021.
  
  ## Usage
 The code requires the external library BOOST (https://www.boost.org/). 
