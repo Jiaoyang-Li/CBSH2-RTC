@@ -24,16 +24,25 @@ Jiaoyang Li, Daniel Harabor, Peter J. Stuckey, Hang Ma, Graeme Gange and Sven Ko
 Artifical Intelligence (AIJ), volume 301, pages 103574, 2021.
  
  ## Usage
-The code requires the external library BOOST (https://www.boost.org/). 
-You can follow the instruction on the BOOST webpage to install it. Or, 
-if you are using Ubantu, you can install it simply by
+The code requires the external library [boost](https://www.boost.org/). 
+If you are using Ubantu, you can install it simply by
 ```shell script
 sudo apt install libboost-all-dev
 ``` 
-
-After you installed BOOST and downloaded the source code, go into the directory of the source code and compile it with CMake: 
+Another easy way of installing the boost library is to install anaconda/miniconda and then 
 ```shell script
-cmake .
+conda install -c anaconda libboost
+```
+which works for a variety of [systems](https://anaconda.org/anaconda/libboost)
+(including linux, osx, and win).
+
+If neither of the above method works, you can also follow the instructions 
+on the [boost](https://www.boost.org/) website and install it manually.
+
+
+After you installed boost and downloaded the source code, go into the directory of the source code and compile it with CMake: 
+```shell script
+cmake -DCMAKE_BUILD_TYPE=RELEASE .
 make
 ```
 
