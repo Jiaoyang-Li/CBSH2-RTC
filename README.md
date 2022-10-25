@@ -1,6 +1,5 @@
 # CBSH2-RTC
 An optimal solver for Multi-Agent Path Finding.
- 
 
 This solver consists of Conflict-Based Search [1] and many of its improvement techniques, including 
 * Prioritizing conflicts [2]
@@ -21,11 +20,11 @@ This solver consists of Conflict-Based Search [1] and many of its improvement te
 Please cite the following paper if you use the code in your published research:  
 Jiaoyang Li, Daniel Harabor, Peter J. Stuckey, Hang Ma, Graeme Gange and Sven Koenig.
 [Pairwise Symmetry Reasoning for Multi-Agent Path Finding Search](https://doi.org/10.1016/j.artint.2021.103574).
-Artifical Intelligence (AIJ), volume 301, pages 103574, 2021.
+Artificial Intelligence (AIJ), volume 301, pages 103574, 2021.
  
  ## Usage
 The code requires the external library [boost](https://www.boost.org/). 
-If you are using Ubantu, you can install it simply by
+If you are using Ubuntu, you can install it simply by
 ```shell script
 sudo apt install libboost-all-dev
 ``` 
