@@ -397,9 +397,14 @@ bool Instance::loadAgents()
 				// read goal [row,col] for agent i
 				beg++;
 				col = atoi((*beg).c_str());
-				beg++;
-				row = atoi((*beg).c_str());
-				goal_locations[i] = linearizeCoordinate(row, col);
+                if (col == -1)
+                    goal_locations[i] = -1;
+                else
+                {
+                    beg++;
+                    row = atoi((*beg).c_str());
+                    goal_locations[i] = linearizeCoordinate(row, col);
+                }
 				i++;
 			}
 			count++;
@@ -427,9 +432,14 @@ bool Instance::loadAgents()
 			// read goal [row,col] for agent i
 			c_beg++;
 			row = atoi((*c_beg).c_str());
-			c_beg++;
-			col = atoi((*c_beg).c_str());
-			goal_locations[i] = linearizeCoordinate(row, col);
+            if (row == -1)
+                goal_locations[i] = -1;
+            else
+            {
+                c_beg++;
+                col = atoi((*c_beg).c_str());
+                goal_locations[i] = linearizeCoordinate(row, col);
+            }
 		}
 	}
 	myfile.close();

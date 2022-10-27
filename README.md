@@ -1,6 +1,11 @@
 # CBSH2-RTC
 An optimal solver for Multi-Agent Path Finding.
 
+**This branch allows agents to have zero goal locations.
+Their goal locations are represented by -1 in the scen files (see example in my.map and my.scen).
+They can complete their paths at any location on the map
+except for the locations in the avoid_locations set maintained by the Instance class.**
+
 This solver consists of Conflict-Based Search [1] and many of its improvement techniques, including 
 * Prioritizing conflicts [2]
 * Bypassing conflicts [3]

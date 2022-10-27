@@ -63,11 +63,11 @@ void CBS::findConflicts(CBSNode& curr, int a1, int a2)
 		if (loc1 == loc2)
 		{
 			shared_ptr<Conflict> conflict(new Conflict());
-			if (target_reasoning && paths[a1]->size() == timestep + 1)
+			if (target_reasoning and search_engines[a1]->goal_location >=0 and  paths[a1]->size() == timestep + 1)
 			{
 				conflict->targetConflict(a1, a2, loc1, timestep);
 			}
-			else if (target_reasoning && paths[a2]->size() == timestep + 1)
+			else if (target_reasoning and search_engines[a2]->goal_location >=0 and  paths[a2]->size() == timestep + 1)
 			{
 				conflict->targetConflict(a2, a1, loc1, timestep);
 			}
@@ -101,7 +101,7 @@ void CBS::findConflicts(CBSNode& curr, int a1, int a2)
 			if (loc1 == loc2)
 			{
 				shared_ptr<Conflict> conflict(new Conflict());
-				if (target_reasoning)
+				if (target_reasoning and search_engines[a1_]->goal_location >=0)
 					conflict->targetConflict(a1_, a2_, loc1, timestep);
 				else
 					conflict->vertexConflict(a1_, a2_, loc1, timestep);
@@ -226,13 +226,17 @@ void CBS::classifyConflicts(CBSNode& node)
 
 
 		bool cardinal1 = false, cardinal2 = false;
-		if (timestep >= (int) paths[a1]->size())
+        if (search_engines[a1]->goal_location < 0) // We assume that non-goal agents always have non-cardinal conflicts.
+            cardinal1 = false;
+        else if (timestep >= (int) paths[a1]->size())
 			cardinal1 = true;
 		else //if (!paths[a1]->at(0).is_single())
 		{
 			mdd_helper.findSingletons(node, a1, *paths[a1]);
 		}
-		if (timestep >= (int) paths[a2]->size())
+        if (search_engines[a2]->goal_location < 0) // We assume that non-goal agents always have non-cardinal conflicts.
+            cardinal2 = false;
+        else if (timestep >= (int) paths[a2]->size())
 			cardinal2 = true;
 		else //if (!paths[a2]->at(0).is_single())
 		{
@@ -246,9 +250,9 @@ void CBS::classifyConflicts(CBSNode& node)
 		}
 		else // vertex conflict or target conflict
 		{
-			if (!cardinal1)
+			if (!cardinal1 and timestep < (int) paths[a1]->size())
 				cardinal1 = paths[a1]->at(timestep).is_single();
-			if (!cardinal2)
+			if (!cardinal2 and timestep < (int) paths[a2]->size())
 				cardinal2 = paths[a2]->at(timestep).is_single();
 		}
 
@@ -296,10 +300,12 @@ void CBS::classifyConflicts(CBSNode& node)
 
 		// Rectangle reasoning
 		if (rectangle_helper.strategy != rectangle_strategy::NR &&
-			(int) paths[con->a1]->size() > timestep &&
-			(int) paths[con->a2]->size() > timestep && //conflict happens before both agents reach their goal locations
-			type == constraint_type::VERTEX && // vertex conflict
-			con->priority != conflict_priority::CARDINAL) // not caridnal vertex conflict
+            search_engines[con->a1]->goal_location >= 0 and
+            search_engines[con->a2]->goal_location >= 0 and // both agents have fixed goal locations
+			(int) paths[con->a1]->size() > timestep and
+			(int) paths[con->a2]->size() > timestep and //conflict happens before both agents reach their goal locations
+			type == constraint_type::VERTEX and // vertex conflict
+			con->priority != conflict_priority::CARDINAL) // not cardinal vertex conflict
 		{
 			auto mdd1 = mdd_helper.getMDD(node, a1, paths[a1]->size());
 			auto mdd2 = mdd_helper.getMDD(node, a2, paths[a2]->size());
@@ -313,7 +319,8 @@ void CBS::classifyConflicts(CBSNode& node)
 		}
 
 		// Mutex reasoning
-		if (mutex_reasoning)
+		if (mutex_reasoning and search_engines[con->a1]->goal_location >= 0 and
+            search_engines[con->a2]->goal_location >= 0) // both agents have fixed goal locations)
 		{
 			// TODO mutex reasoning is per agent pair, don't do duplicated work...
 			auto mdd1 = mdd_helper.getMDD(node, a1, paths[a1]->size());

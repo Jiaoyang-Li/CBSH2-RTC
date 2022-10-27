@@ -35,6 +35,7 @@ void MDD::printNodes() const
 
 bool MDD::buildMDD(const ConstraintTable& ct, int num_of_levels, const SingleAgentSolver* _solver)
 {
+    assert(_solver->goal_location >= 0);
   this->solver = _solver;
   auto root = new MDDNode(solver->start_location, nullptr); // Root
   root->cost = num_of_levels - 1;
@@ -402,7 +403,7 @@ std::ostream& operator<<(std::ostream& os, const MDD& mdd)
 }
 
 
-SyncMDD::SyncMDD(const MDD& cpy) // deep copy of a MDD
+SyncMDD::SyncMDD(const MDD& cpy) // deep copy of an MDD
 {
 	levels.resize(cpy.levels.size());
 	auto root = new SyncMDDNode(cpy.levels[0].front()->location, nullptr);
@@ -480,7 +481,8 @@ SyncMDD::~SyncMDD()
 
 MDD* MDDTable::getMDD(CBSNode& node, int id, size_t mdd_levels)
 {
-	ConstraintsHasher c(id, &node);
+    if (search_engines[id]->goal_location == -1) return nullptr; // we don't build MDDs for non-goal agents
+    ConstraintsHasher c(id, &node);
 	auto got = lookupTable[c.a].find(c);
 	if (got != lookupTable[c.a].end())
 	{
@@ -513,6 +515,12 @@ double MDDTable::getAverageWidth(CBSNode& node, int agent, size_t mdd_levels)
 
 void MDDTable::findSingletons(CBSNode& node, int agent, Path& path)
 {
+    if (search_engines[agent]->goal_location < 0) // we assume that non-goal agents mdd-width is the map size
+    {
+        for (size_t i = 0; i < path.size(); i++)
+            path[i].mdd_width = search_engines[agent]->instance.map_size;
+        return;
+    }
 	auto mdd = getMDD(node, agent, path.size());
 	for (size_t i = 0; i < mdd->levels.size(); i++)
 		path[i].mdd_width = mdd->levels[i].size();

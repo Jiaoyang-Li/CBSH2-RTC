@@ -27,10 +27,10 @@ Path SpaceTimeAStar::findPath(const CBSNode& node, const ConstraintTable& initia
 	num_expanded = 0;
 	num_generated = 0;
 	// build constraint table
-	auto starrt_time = clock();
+	auto start_time = clock();
 	ConstraintTable constraint_table(initial_constraints);
 	constraint_table.build(node, agent);
-	runtime_build_CT = (double) (clock() - starrt_time) / CLOCKS_PER_SEC;
+	runtime_build_CT = (double) (clock() - start_time) / CLOCKS_PER_SEC;
 	if (constraint_table.length_min >= MAX_TIMESTEP ||
 		constraint_table.length_min > constraint_table.length_max ||  // the agent cannot reach its goal location
 		constraint_table.constrained(start_location, 0)) // the agent cannot stay at its start location
@@ -38,9 +38,9 @@ Path SpaceTimeAStar::findPath(const CBSNode& node, const ConstraintTable& initia
 		return Path();
 	}
 
-	starrt_time = clock();
+    start_time = clock();
 	constraint_table.buildCAT(agent, paths, node.makespan + 1);
-	runtime_build_CAT = (double) (clock() - starrt_time) / CLOCKS_PER_SEC;
+	runtime_build_CAT = (double) (clock() - start_time) / CLOCKS_PER_SEC;
 
 	if (constraint_table.getNumOfLandmarks() > 0)
 	{
@@ -281,7 +281,7 @@ Path SpaceTimeAStar::findShortestPath(ConstraintTable& constraint_table, const p
 	start->in_openlist = true;
 	allNodes_table.insert(start);
 	min_f_val = (int) start->getFVal();
-	int holding_time = constraint_table.getHoldingTime(); // the earliest timestep that the agent can hold its goal location. The length_min is considered here.
+	int holding_time = constraint_table.getHoldingTime(goal_location); // the earliest timestep that the agent can hold its goal location. The length_min is considered here.
 	lower_bound = max(holding_time - start_state.second, max(min_f_val, lowerbound));
 
 	while (!open_list.empty())
@@ -290,9 +290,13 @@ Path SpaceTimeAStar::findShortestPath(ConstraintTable& constraint_table, const p
 		auto* curr = popNode();
 
 		// check if the popped node is a goal
-		if (curr->location == goal_location && // arrive at the goal location
-			!curr->wait_at_goal && // not wait at the goal location
-			curr->timestep >= holding_time) // the agent can hold the goal location afterward
+        if ((goal_location < 0 and // non-goal agent
+             instance.avoid_locations.count(curr->location) == 0 and // not on the prohibited locations
+             curr->timestep >= constraint_table.getHoldingTime(curr->location)) or // can stay at this location without collisions
+            (goal_location >= 0 and  //goal agent
+             curr->location == goal_location && // arrive at the goal location
+             !curr->wait_at_goal && // not wait at the goal location
+             curr->timestep >= holding_time)) // the agent can hold the goal location afterward
 		{
 			updatePath(curr, path);
 			break;
@@ -423,7 +427,7 @@ Path SpaceTimeAStar::findShortestPath(ConstraintTable& constraint_table, const p
     start->in_openlist = true;
     allNodes_table.insert(start);
     min_f_val = (int) start->getFVal();
-    int holding_time = constraint_table.getHoldingTime(); // the earliest timestep that the agent can hold its goal location. The length_min is considered here.
+    int holding_time = constraint_table.getHoldingTime(goal_location); // the earliest timestep that the agent can hold its goal location. The length_min is considered here.
     lower_bound = max(holding_time - start_state.second, max(min_f_val, lowerbound));
 
     while (!open_list.empty())
@@ -534,10 +538,10 @@ Path SpaceTimeAStar::findShortestPath(ConstraintTable& constraint_table, const p
     return path;
 }
 
-// find a path from from start_state to goal_state
+// find a path from start_state to goal_state
 Path SpaceTimeAStar::findPath(ConstraintTable& constraint_table, const pair<int, int> start_state, const pair<int, int> goal_state)
 {
-	// generate start and add it to the OPEN & FOCAL list
+	// generate start and add it to the FOCAL list
 	Path path;
 	auto start = new AStarNode(start_state.first,  // location
 		0,  // g val 
@@ -675,7 +679,7 @@ int SpaceTimeAStar::getTravelTime(int end, const ConstraintTable& constraint_tab
 					if (existing_next->g_val > next_g_val)
 					{
 						existing_next->g_val = next_g_val;
-						// existing_next->timestep = next_timestep; // Idon't think we need this?
+						// existing_next->timestep = next_timestep; // I don't think we need this?
 						open_list.increase(existing_next->open_handle);
 					}
 				}

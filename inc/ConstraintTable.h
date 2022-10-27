@@ -15,7 +15,7 @@ public:
 	size_t map_size;
 	size_t cat_size;
 
-	int getHoldingTime(); // the earliest timestep that the agent can hold its goal location
+	int getHoldingTime(int location); // the earliest timestep that the agent can hold its the location
 
 	// void clear(){ct.clear(); cat_small.clear(); cat_large.clear(); landmarks.clear(); length_min = 0, length_max = INT_MAX; latest_timestep = 0;}
 

@@ -29,6 +29,14 @@ void SingleAgentSolver::compute_heuristics()
 		};  // used by OPEN (heap) to compare nodes (top of the heap has min f-val, and then highest g-val)
 	};
 
+    if (goal_location < 0)
+    {
+        my_heuristic.resize(instance.map_size, 0);
+        for (auto loc : instance.avoid_locations)
+            my_heuristic[loc] = 1;
+        return;
+    }
+    
 	my_heuristic.resize(instance.map_size, MAX_TIMESTEP);
 
 	// generate a heap that can save nodes (and a open_handle)

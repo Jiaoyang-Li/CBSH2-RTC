@@ -36,7 +36,7 @@ Path SIPP::findPath(const CBSNode& node, const ConstraintTable& initial_constrai
 	ReservationTable reservation_table(initial_constraints);
 	reservation_table.build(node, agent);
 	runtime_build_CT = (double) (clock() - t) / CLOCKS_PER_SEC;
-	int holding_time = reservation_table.getHoldingTime();
+	int holding_time = reservation_table.getHoldingTime(goal_location);
 	t = clock();
 	reservation_table.buildCAT(agent, paths);
 	runtime_build_CAT = (double) (clock() - t) / CLOCKS_PER_SEC;
@@ -71,9 +71,13 @@ Path SIPP::findPath(const CBSNode& node, const ConstraintTable& initial_constrai
 		num_expanded++;
 
 		// check if the popped node is a goal node
-		if (curr->location == goal_location && // arrive at the goal location
-			!curr->wait_at_goal && // not wait at the goal location
-			curr->timestep >= holding_time) // the agent can hold the goal location afterward
+        if ((goal_location < 0 and // non-goal agent
+             instance.avoid_locations.count(curr->location) == 0 and // not on the prohibited locations
+             curr->timestep >= reservation_table.getHoldingTime(curr->location)) or // can stay at this location without collisions
+            (goal_location >= 0 and  //goal agent
+             curr->location == goal_location && // arrive at the goal location
+             !curr->wait_at_goal && // not wait at the goal location
+             curr->timestep >= holding_time)) // the agent can hold the goal location afterward
 		{
 			updatePath(curr, path);
 			break;

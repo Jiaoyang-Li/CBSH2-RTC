@@ -359,11 +359,11 @@ int ConstraintTable::getNumOfConflictsForStep(size_t curr_id, size_t next_id, in
 
 
 
-// return the earliest timestep that the agent can hold its goal location
-int ConstraintTable::getHoldingTime()
+// return the earliest timestep that the agent can hold the given location
+int ConstraintTable::getHoldingTime(int location)
 {
 	int rst = length_min;
-	auto it = ct.find(goal_location);
+	auto it = ct.find(location);
 	if (it != ct.end())
 	{
 		for (auto time_range : it->second)
@@ -371,7 +371,7 @@ int ConstraintTable::getHoldingTime()
 	}
 	for (auto landmark : landmarks)
 	{
-		if (landmark.second != goal_location)
+		if (landmark.second != location)
 			rst = max(rst, (int) landmark.first + 1);
 	}
 	return rst;

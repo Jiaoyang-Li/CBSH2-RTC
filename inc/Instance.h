@@ -10,6 +10,7 @@ public:
 	int num_of_cols = 0;
 	int num_of_rows = 0;
 	int map_size = 0;
+    set<int> avoid_locations; // agents without goal locations cannot end their paths with these locations
 
 	Instance() = default;
 	Instance(const string& map_fname, const string& agent_fname, 
