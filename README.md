@@ -1,4 +1,7 @@
 # CBSH2-RTC
+![test_ubuntu](https://github.com/Jiaoyang-Li/CBSH2-RTC/actions/workflows/test_ubuntu.yml/badge.svg)
+![test_macos](https://github.com/Jiaoyang-Li/CBSH2-RTC/actions/workflows/test_macos.yml/badge.svg)
+
 An optimal solver for Multi-Agent Path Finding.
 
 This solver consists of Conflict-Based Search [1] and many of its improvement techniques, including 
