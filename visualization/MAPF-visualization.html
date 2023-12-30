@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="MAPF.js"></script>
+    <style>
+        .canvas-container {
+          position: relative;
+        }
+    
+        .canvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      </style>
+</head>
+<body>
+    first select Map:<input type="file" id="file-input" >
+    second select paths:<input type="file" id="csvFileInput">
+    <button onclick="" id="myButton">next step</button>
+    <div class="canvas-container">
+        <canvas class="canvas" id="myCanvas" width="700" height="700"></canvas>
+        <canvas class="canvas" id="myCanvas1" width="700" height="700"></canvas>
+    </div>
+</body>
+</html>

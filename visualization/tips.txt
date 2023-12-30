@@ -1,0 +1,7 @@
+you need select map first , and then select path.
+example:
+After running the author's example 
+./cbs -m random-32-32-20.map -a random-32-32-20-random-1.scen -o test.csv --outputPaths=paths.txt -k 30 -t 60
+you get paths.txt
+open MAPF-visualization.html
+select random-32-32-20.map firstly , and secondly select paths.txt, then click "next step" button .
